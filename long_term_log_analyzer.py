@@ -1,4 +1,4 @@
-# File: python/log_analyzer.py
+# File: python/long_term_log_analyzer.py
 
 import os
 import base64
