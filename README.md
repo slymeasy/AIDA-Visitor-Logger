@@ -127,7 +127,3 @@ Contributions are welcome! Please submit a pull request with detailed informatio
 ## License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
-
----
-
-This should now be the **complete** README.md file with all the necessary information for setting up the **Great AIDA Visitor Logger** program. Let me know if anything else needs to be added or clarified!
