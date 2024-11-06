@@ -10,6 +10,14 @@ from cryptography.hazmat.primitives import hashes  # Import hashes
 from cryptography.hazmat.backends import default_backend
 import pandas as pd
 
+# Define a list of visitor IDs to ignore
+IGNORE_VISITOR_IDS = [
+    'visitor_id_1',
+    'visitor_id_2',
+    'visitor_id_3',
+    # Add more IDs as needed
+]
+
 # Retrieve the ENCRYPTION_KEY from environment variables
 ENCRYPTION_KEY_RAW = os.environ.get('ENCRYPTION_KEY')
 if ENCRYPTION_KEY_RAW is None:
@@ -67,6 +75,8 @@ class LogAnalyzerApp:
         if not file_paths:
             return
 
+        ignored_count = 0  # Counter for ignored entries
+
         for file_path in file_paths:
             with open(file_path, 'r') as f:
                 for line in f:
@@ -74,9 +84,16 @@ class LogAnalyzerApp:
                     if decrypted:
                         try:
                             log_entry = json.loads(decrypted)
+                            visitor_id = log_entry.get('visitor_id', 'n/a')
+                            
+                            # Check if the visitor_id is in the ignore list
+                            if visitor_id in IGNORE_VISITOR_IDS:
+                                ignored_count += 1
+                                continue  # Skip this entry
+
                             self.logs.append(log_entry)
                             self.tree.insert("", "end", values=(
-                                log_entry.get('visitor_id', 'n/a'),
+                                visitor_id,
                                 log_entry.get('time_spent', 'n/a'),
                                 log_entry.get('aida_stage', 'n/a'),
                                 log_entry.get('referrer', 'n/a'),
@@ -87,7 +104,13 @@ class LogAnalyzerApp:
                         except json.JSONDecodeError:
                             continue
 
-        messagebox.showinfo("Upload Complete", f"Uploaded {len(file_paths)} files with {len(self.logs)} log entries.")
+        total_uploaded = len(file_paths)
+        total_logs = len(self.logs)
+        messagebox.showinfo(
+            "Upload Complete",
+            f"Uploaded {total_uploaded} files with {total_logs} log entries.\n"
+            f"Ignored {ignored_count} entries based on visitor ID."
+        )
 
     def analyze_logs(self):
         if not self.logs:
