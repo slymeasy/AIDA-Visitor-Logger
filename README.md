@@ -1,3 +1,5 @@
+## I got some weird performance issues with this installed on shared hosting so I am archiving it.
+
 # Great AIDA Visitor Logger
 
 **Great AIDA Visitor Logger** is a privacy-compliant, lightweight visitor tracking solution that utilizes the AIDA (Attention, Interest, Desire, Action) model to log website visitor interactions. The program captures valuable insights into visitor behavior, such as time spent on each page, referrers, and search keywords, all while ensuring user privacy through anonymized logging and AES-256 encryption.
